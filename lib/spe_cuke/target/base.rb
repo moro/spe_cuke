@@ -18,7 +18,7 @@ module SpeCuke
       end
 
       def execute!
-        commands = @env.has_rakefile? ? rake_commands : raw_commands
+        commands = @env.prefer_rake? ? rake_commands : raw_commands
         SpeCuke.wrap_execute!( commands.flatten )
       end
     end

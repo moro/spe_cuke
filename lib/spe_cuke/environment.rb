@@ -4,8 +4,9 @@ require 'yaml'
 
 module SpeCuke
   class Environment
-    def initialize(root = '.')
+    def initialize(root = '.', options = {})
       @root = Pathname.new(root)
+      @options = options
     end
 
     def command(cmd)
@@ -19,6 +20,10 @@ module SpeCuke
     def gem_format_executable?
       @_gemrc = YAML.load_file(Pathname.new(ENV['HOME']) + '.gemrc')
       @_gemrc['gem'].include?('--format-executable')
+    end
+
+    def prefer_rake?
+      has_rakefile? && @options[:prefer_rake]
     end
 
     def has_rakefile?

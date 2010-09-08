@@ -15,19 +15,23 @@ module SpeCuke::Target
       cmds = [@env.command('spec')]
       cmds << self.class.default_options
       if @line
-        cmds << ['-l', @line.to_s] if @line
         cmds << '-fn' # XXX
       end
-      cmds << @fname
+      cmds << fn_and_line
     end
 
     def rake_commands
-      cmds = [@env.command('rake'), 'spec']
+      cmds = [@env.command('rake'), 'spec', "SPEC=#{fn_and_line}"]
       if @line
-        cmds << ["SPEC=#{@fname}:#{@line}", "SPEC_OPTS=#{self.class.default_options.join(' ')} --format nested"]
+        cmds << ["SPEC_OPTS=#{self.class.default_options.join(' ')} --format nested"]
       else
-        cmds << "SPEC=#{@fname}"
+        # use spec/spec.opts instead of self.class.default_options
       end
+      cmds
+    end
+
+    def fn_and_line
+      @line ? "#{@fname}:#{@line}" : @fname
     end
   end
 end

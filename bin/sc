@@ -7,12 +7,13 @@ require 'spe_cuke/environment'
 require 'spe_cuke/target'
 
 opt = OptionParser.new
-$option = {}
+$option = {:root => '.'}
 opt.on('-l', '--line=N', Integer) {|l| $option[:line] = l }
+opt.on('-r', '--rake', TrueClass) {|b| $option[:prefer_rake] = b }
 opt.parse!(ARGV)
 
 SpeCuke::Target.for(ARGV.first).new(
-  SpeCuke::Environment.new,
+  SpeCuke::Environment.new($option[:root], :prefer_rake => $option[:prefer_rake]),
   ARGV.first,
   $option[:line]
 ).execute!
