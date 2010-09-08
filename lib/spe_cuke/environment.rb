@@ -21,6 +21,10 @@ module SpeCuke
       @_gemrc['gem'].include?('--format-executable')
     end
 
+    def has_rakefile?
+      (@root + 'Rakefile').exist?
+    end
+
     private
     def bundle_exec
       [executable_name('bundle'), 'exec']
