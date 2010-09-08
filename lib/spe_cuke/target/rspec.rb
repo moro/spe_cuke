@@ -8,6 +8,7 @@ module SpeCuke::Target
         file =~ /_spec\.rb/
       end
     end
+    self.default_options = ['--color']
 
     private
     def raw_commands
@@ -23,7 +24,7 @@ module SpeCuke::Target
     def rake_commands
       cmds = [@env.command('rake'), 'spec']
       if @line
-        cmds << "SPEC=#{@fname}:#{@line}"
+        cmds << ["SPEC=#{@fname}:#{@line}", "SPEC_OPTS=#{self.class.default_options.join(' ')} --format nested"]
       else
         cmds << "SPEC=#{@fname}"
       end
