@@ -1,3 +1,8 @@
 module SpeCuke
-  # Your code goes here...
+  extend self
+
+  def wrap_execute!(commands)
+    puts commands.join(' ')
+    system(*commands)
+  end
 end

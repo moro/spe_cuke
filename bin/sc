@@ -1,0 +1,19 @@
+# vim:set filetype=ruby:
+
+require 'optparse'
+
+require 'spe_cuke'
+require 'spe_cuke/environment'
+require 'spe_cuke/target'
+
+opt = OptionParser.new
+$option = {}
+opt.on('-l', '--line=N', Integer) {|l| $option[:line] = l }
+opt.parse!(ARGV)
+
+SpeCuke::Target.for(ARGV.first).new(
+  SpeCuke::Environment.new,
+  ARGV.first,
+  $option[:line]
+).execute!
+
