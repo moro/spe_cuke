@@ -6,6 +6,7 @@ module SpeCuke
 describe Environment do
   before do
     @env = Environment.new
+    @env.stub(:bin_suffix).and_return '187'
     @env.stub(:bundlized?).and_return false
     @env.stub(:gem_format_executable?).and_return false
   end
@@ -18,7 +19,7 @@ describe Environment do
         @env.stub(:gem_format_executable?).and_return true
       end
 
-      it { should == %w[bundle18 exec rails] }
+      it { should == %w[bundle187 exec rails] }
     end
 
     context 'bundlized' do
@@ -34,7 +35,7 @@ describe Environment do
         @env.stub(:gem_format_executable?).and_return true
       end
 
-      it { should == %w[rails18] }
+      it { should == %w[rails187] }
     end
   end
 end

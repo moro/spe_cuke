@@ -37,10 +37,14 @@ module SpeCuke
 
     def executable_name(base)
       if gem_format_executable?
-        base + RbConfig::CONFIG['RUBY_INSTALL_NAME'].sub(/\Aruby/, '')
+        base + bin_suffix
       else
         base
       end
+    end
+
+    def bin_suffix
+      RbConfig::CONFIG['RUBY_INSTALL_NAME'].sub(/\Aruby/, '')
     end
   end
 end
