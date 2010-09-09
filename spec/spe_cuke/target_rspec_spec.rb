@@ -19,7 +19,7 @@ describe Target::Rspec do
 
   context 'spec/foo/bar_spec.rb' do
     before do
-      @env.stub!(:has_rakefile?).and_return false
+      @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb')
       SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color spec/foo/bar_spec.rb])
     end
@@ -30,9 +30,9 @@ describe Target::Rspec do
 
   context 'spec/foo/bar_spec.rb on line 40' do
     before do
-      @env.stub!(:has_rakefile?).and_return false
+      @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
-      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color -l 40 -fn spec/foo/bar_spec.rb])
+      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color -fn spec/foo/bar_spec.rb:40])
     end
 
     it(%q[spec --color -l 40 spec/foo/bar_spec.rb]){ @target.execute! }
@@ -40,7 +40,7 @@ describe Target::Rspec do
 
   context 'spec/foo/bar_spec.rb w/Rakefile' do
     before do
-      @env.stub!(:has_rakefile?).and_return true
+      @env.stub!(:prefer_rake?).and_return true
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb')
       SpeCuke.should_receive(:wrap_execute!).with(%w[rake spec SPEC=spec/foo/bar_spec.rb])
     end
@@ -50,9 +50,9 @@ describe Target::Rspec do
 
   context 'spec/foo/bar_spec.rb w/Rakefile on line 40' do
     before do
-      @env.stub!(:has_rakefile?).and_return true
+      @env.stub!(:prefer_rake?).and_return true
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
-      SpeCuke.should_receive(:wrap_execute!).with(%w[rake spec SPEC=spec/foo/bar_spec.rb:40])
+      SpeCuke.should_receive(:wrap_execute!).with(["rake", "spec", "SPEC=spec/foo/bar_spec.rb:40", "SPEC_OPTS=--color --format nested"])
     end
 
     it(%q[rake spec SPEC=spec/foo/bar_spec.rb:40]){ @target.execute! }
