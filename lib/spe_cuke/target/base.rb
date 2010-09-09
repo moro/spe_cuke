@@ -8,6 +8,9 @@ module SpeCuke
         def inherited(sub)
           @subclasses << sub
         end
+
+        def default_options; @@default_options; end
+        def default_options=(opt); @@default_options = opt; end
       end
       @subclasses = []
 

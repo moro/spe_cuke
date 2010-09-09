@@ -1,4 +1,5 @@
 require 'spe_cuke/target/rspec'
+require 'spe_cuke/target/cucumber'
 
 module SpeCuke
   module Target
