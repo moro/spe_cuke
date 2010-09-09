@@ -24,7 +24,7 @@ when not bundlized but --format-executable in .gemrc
 and has option to specify invoking via rake.
 
  sc -r --line 32 spec/foobar/foobar_spec.rb #=>
- bundle exec rake18 spec SPEC=spec/foobar/foobar_spec.rb:32
+ bundle18 exec rake spec SPEC=spec/foobar/foobar_spec.rb:32
 
 == Vim script
 
