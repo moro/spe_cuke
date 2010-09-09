@@ -1,0 +1,68 @@
+= SpeCuke
+
+A simple helper command to run rspec or cucumber tests.
+
+== Description
+
+spe_cuke provides command `sc'.
+
+This helps you to run spec/cuke test in various environments, such as bundler-ized?, --format-executable in .gemrc or so.
+
+=== Example
+The command below invokes
+
+ sc --line 32 spec/foobar/foobar_spec.rb
+
+when bundlized(Gemfile exists)
+
+ bundle exec spec --color --fn spec/foobar/foobar_spec.rb:32
+
+when not bundlized but --format-executable in .gemrc
+
+ spec18 --color --fn spec/foobar/foobar_spec.rb:32
+
+and has option to specify invoking via rake.
+
+ sc -r --line 32 spec/foobar/foobar_spec.rb #=>
+ bundle exec rake18 spec SPEC=spec/foobar/foobar_spec.rb:32
+
+== Vim script
+
+append below to your .vimrc or so.
+
+ function s:SetupSpeCuke()
+   command! RunTestFile exe '!sc ' . expand('%:p')
+   command! RunTestCase exe '!sc --line ' . line('.') . ' ' . expand('%:p')
+
+   nnoremap -tf :RunTestFile<CR>
+   nnoremap -tc :RunTestCase<CR>
+ endfunction
+
+ au BufRead,BufNewFile *_spec.rb,*.feature call s:SetupSpeCuke()
+
+Then
+
+You type '-tf' in normal mode, invokes 'sc --line <current_line> <current_file>' and
+test around current line's example/scenario.
+
+You type '-tc' in normal mode, invokes 'sc <current_file>' and test current file.
+
+== Planning features.
+
+* spork support
+* run spec from name-paired script (run spec/spe_cuke/environment_spec.rb from lib/spe_cuke/environment.rb)
+
+== Installation
+
+ gem install spe_cuke
+
+== Acknowledgements
+
+spe_cuke's development has been supported by Eiwa System Management,Inc.
+
+== Copyright
+
+Author::    MOROHASHI Kyosuke <moronatural@gmail.com>
+Copyright:: Copyright (c) 2010 MOROHASHI Kyosuke
+License::   MIT
+
