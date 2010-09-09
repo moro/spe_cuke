@@ -2,6 +2,7 @@ require 'rbconfig'
 require 'pathname'
 require 'yaml'
 require 'drb'
+require 'bundler'
 
 module SpeCuke
   class Environment
@@ -31,6 +32,13 @@ module SpeCuke
       (@root + 'Rakefile').exist?
     end
 
+    def bundled_version(gem_name)
+      return nil unless bundlized?
+
+      lp = Bundler::LockfileParser.new(gemfile_dot_lock)
+      lp.specs.detect{|bs| bs.name == gem_name}.version rescue nil
+    end
+
     def spork_running?
       begin
         DRbObject.new_with_uri("druby://127.0.0.1:8989").respond_to?(:run)
@@ -40,6 +48,10 @@ module SpeCuke
     end
 
     private
+    def gemfile_dot_lock
+      (@root + 'Gemfile.lock').read
+    end
+
     def bundle_exec
       [executable_name('bundle'), 'exec']
     end

@@ -12,6 +12,28 @@ describe Environment do
   end
   subject { @env.command('rails') }
 
+  describe 'bundled_version' do
+    before do
+      @env.stub(:bundlized?).and_return true
+    end
+    subject { @env.bundled_version('rspec') }
+
+    context 'rspec 1.3.0' do
+      before do
+        @env.stub(:gemfile_dot_lock).and_return File.read('spec/fixtures/Gemfile.lock.rspec1')
+      end
+      it { should == Gem::Version.new("1.3.0") }
+    end
+
+    context 'rspec 2.0' do
+      before do
+        @env.stub(:gemfile_dot_lock).and_return File.read('spec/fixtures/Gemfile.lock.rspec2')
+      end
+      it { should == Gem::Version.new("2.0.0.beta.20") }
+      it { should >  Gem::Version.new("2.0.0.beta.0") }
+    end
+  end
+
   describe '#command()' do
     context 'bundlized & --gem_format_executable' do
       before do

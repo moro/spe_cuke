@@ -12,11 +12,17 @@ module SpeCuke::Target
 
     private
     def raw_commands
-      cmds = [@env.command('spec')]
+      cmds = [@env.command(spec_command_base)]
       cmds << self.class.default_options
       cmds << '-fn' if @line # XXX
       cmds << '--drb' if @env.spork_running?
       cmds << fn_and_line
+    end
+
+    def spec_command_base
+      v = @env.bundled_version('rspec')
+
+      (v.nil? || v < Gem::Version.new("2.0.0.beta.0")) ? 'spec' : 'rspec'
     end
 
     def rake_commands
