@@ -1,6 +1,7 @@
 require 'rbconfig'
 require 'pathname'
 require 'yaml'
+require 'drb'
 
 module SpeCuke
   class Environment
@@ -28,6 +29,14 @@ module SpeCuke
 
     def has_rakefile?
       (@root + 'Rakefile').exist?
+    end
+
+    def spork_running?
+      begin
+        DRbObject.new_with_uri("druby://127.0.0.1:8989").respond_to?(:run)
+      rescue DRb::DRbConnError, Errno::ECONNREFUSED
+        return false
+      end
     end
 
     private

@@ -14,9 +14,8 @@ module SpeCuke::Target
     def raw_commands
       cmds = [@env.command('spec')]
       cmds << self.class.default_options
-      if @line
-        cmds << '-fn' # XXX
-      end
+      cmds << '-fn' if @line # XXX
+      cmds << '--drb' if @env.spork_running?
       cmds << fn_and_line
     end
 

@@ -13,6 +13,7 @@ describe Target::Rspec do
     @env = Environment.new
     @env.stub!(:bundlized?).and_return false
     @env.stub!(:gem_format_executable?).and_return false
+    @env.stub!(:spork_running?).and_return false
 
     Target::Rspec.default_options = ['--color']
   end
@@ -33,6 +34,17 @@ describe Target::Rspec do
       @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
       SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color -fn spec/foo/bar_spec.rb:40])
+    end
+
+    it(%q[spec --color -l 40 spec/foo/bar_spec.rb]){ @target.execute! }
+  end
+
+  context 'spec/foo/bar_spec.rb on line:40/spork:true' do
+    before do
+      @env.stub!(:spork_running?).and_return true
+      @env.stub!(:prefer_rake?).and_return false
+      @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
+      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color -fn --drb spec/foo/bar_spec.rb:40])
     end
 
     it(%q[spec --color -l 40 spec/foo/bar_spec.rb]){ @target.execute! }
