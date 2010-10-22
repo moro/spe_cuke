@@ -12,9 +12,14 @@ opt.on('-l', '--line=N', Integer) {|l| $option[:line] = l }
 opt.on('-r', '--rake', TrueClass) {|b| $option[:prefer_rake] = b }
 opt.parse!(ARGV)
 
-SpeCuke::Target.for(ARGV.first).new(
-  SpeCuke::Environment.new($option[:root], :prefer_rake => $option[:prefer_rake]),
-  ARGV.first,
-  $option[:line]
-).execute!
+if target = SpeCuke::Target.for(ARGV.first)
+  target.new(
+    SpeCuke::Environment.new($option[:root], :prefer_rake => $option[:prefer_rake]),
+    ARGV.first,
+    $option[:line]
+  ).execute!
+else
+  $stderr.puts "can't build test commands from `#{ARGV.first}'."
+  exit 1
+end
 
