@@ -1,5 +1,6 @@
 == master
-* improve command invokation error message
+* improve command invokation error message.
+* workaround for hanging up during spork detection.
 
 == 0.3.0 / 2010-09-14
 * assume test file from product code name.

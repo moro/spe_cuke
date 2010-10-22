@@ -2,6 +2,7 @@ require 'rbconfig'
 require 'pathname'
 require 'yaml'
 require 'drb'
+require 'timeout'
 require 'bundler'
 
 module SpeCuke
@@ -41,8 +42,8 @@ module SpeCuke
 
     def spork_running?
       begin
-        DRbObject.new_with_uri("druby://127.0.0.1:8989").respond_to?(:run)
-      rescue DRb::DRbConnError, Errno::ECONNREFUSED
+        timeout(1) { DRbObject.new_with_uri("druby://127.0.0.1:8989").respond_to?(:run) }
+      rescue DRb::DRbConnError, Errno::ECONNREFUSED, Timeout::Error
         return false
       end
     end
