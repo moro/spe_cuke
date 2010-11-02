@@ -30,7 +30,7 @@ and has option to specify invoking via rake.
 
 append below to your .vimrc or so.
 
- function s:SetupSpeCuke()
+ function! s:SetupSpeCuke()
    command! RunTestFile exe '!sc ' . expand('%:p')
    command! RunTestCase exe '!sc --line ' . line('.') . ' ' . expand('%:p')
 
