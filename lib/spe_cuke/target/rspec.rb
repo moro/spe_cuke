@@ -10,12 +10,30 @@ module SpeCuke::Target
     end
     self.default_options = ['--color']
 
+    def execute!
+      @env.spork_running? ? execute_direct! : super
+    end
+
     private
+    # XXX refactor
+    def execute_direct!
+      begin
+        DRb.start_service("druby://localhost:0")
+      rescue SocketError, Errno::EADDRNOTAVAIL
+        DRb.start_service("druby://:0")
+      end
+      puts "direct executing `spork_server.run(#{cmd_parameters.flatten.join(" ")})'"
+      @env.spork_server.run([fn_and_line], STDERR, STDOUT)
+    end
+
     def raw_commands
-      cmds = [@env.command(spec_command_base)]
+      ([@env.command(spec_command_base)] + cmd_parameters).flatten
+    end
+
+    def cmd_parameters
+      cmds = []
       cmds << self.class.default_options
       cmds << '-fn' if @line # XXX
-      cmds << '--drb' if @env.spork_running?
       cmds << fn_and_line
     end
 

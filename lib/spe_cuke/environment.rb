@@ -42,10 +42,14 @@ module SpeCuke
 
     def spork_running?
       begin
-        timeout(1) { DRbObject.new_with_uri("druby://127.0.0.1:8989").respond_to?(:run) }
-      rescue DRb::DRbConnError, Errno::ECONNREFUSED, Timeout::Error
+        timeout(1) { spork_server && spork_server.respond_to?(:run) }
+      rescue DRb::DRbConnError, Errno::ECONNREFUSED, Timeout::Error, SocketError, Errno::EADDRNOTAVAIL
         return false
       end
+    end
+
+    def spork_server
+      @_spork_server ||= DRbObject.new_with_uri("druby://127.0.0.1:8989")
     end
 
     private

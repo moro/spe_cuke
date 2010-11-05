@@ -1,6 +1,8 @@
-== master
+== 0.3.1 / 2010-11-05
 * improve command invokation error message.
 * workaround for hanging up during spork detection.
+* import direct spork execution from http://blog.twiwt.org/e/cafcfe and https://gist.github.com/662448
+* run with RSpec 2.0 (and Rails 3)
 
 == 0.3.0 / 2010-09-14
 * assume test file from product code name.
