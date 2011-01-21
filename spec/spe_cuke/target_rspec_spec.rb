@@ -41,6 +41,7 @@ describe Target::Rspec do
 
   context 'spec/foo/bar_spec.rb on line:40/spork:true' do
     before do
+      pending("unknow purpose test")
       @env.stub!(:spork_running?).and_return true
       @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
