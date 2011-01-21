@@ -13,6 +13,7 @@ describe Target::Cucumber do
     @env = Environment.new
     @env.stub!(:bundlized?).and_return false
     @env.stub!(:gem_format_executable?).and_return false
+    @env.stub!(:spork_running?).and_return false
 
     Target::Cucumber.default_options = ['--color']
   end

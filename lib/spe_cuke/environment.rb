@@ -40,16 +40,16 @@ module SpeCuke
       lp.specs.detect{|bs| bs.name == gem_name}.version rescue nil
     end
 
-    def spork_running?
+    def spork_running?(port)
       begin
-        timeout(1) { spork_server && spork_server.respond_to?(:run) }
+        timeout(1) { (s = spork_server(port)) && s.respond_to?(:run) }
       rescue DRb::DRbConnError, Errno::ECONNREFUSED, Timeout::Error, SocketError, Errno::EADDRNOTAVAIL
         return false
       end
     end
 
-    def spork_server
-      @_spork_server ||= DRbObject.new_with_uri("druby://127.0.0.1:8989")
+    def spork_server(port = 8989)
+      DRbObject.new_with_uri("druby://127.0.0.1:#{port}")
     end
 
     private

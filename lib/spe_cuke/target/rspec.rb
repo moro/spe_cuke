@@ -2,6 +2,7 @@ require 'spe_cuke/target/base'
 
 module SpeCuke::Target
   class Rspec < Base
+    SPORK_DEFAULT_PORT = 8989
     class << self
       attr_accessor :default_options
       def suitable?(file)
@@ -11,21 +12,10 @@ module SpeCuke::Target
     self.default_options = ['--color']
 
     def execute!
-      @env.spork_running? ? execute_direct! : super
+      @env.spork_running?(SPORK_DEFAULT_PORT) ? execute_direct!(SPORK_DEFAULT_PORT) : super
     end
 
     private
-    # XXX refactor
-    def execute_direct!
-      begin
-        DRb.start_service("druby://localhost:0")
-      rescue SocketError, Errno::EADDRNOTAVAIL
-        DRb.start_service("druby://:0")
-      end
-      puts "direct executing `spork_server.run(#{cmd_parameters.flatten.join(" ")})'"
-      @env.spork_server.run([fn_and_line], STDERR, STDOUT)
-    end
-
     def raw_commands
       ([@env.command(spec_command_base)] + cmd_parameters).flatten
     end

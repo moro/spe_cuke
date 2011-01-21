@@ -2,12 +2,17 @@ require 'spe_cuke/target/base'
 
 module SpeCuke::Target
   class Cucumber < Base
+    SPORK_DEFAULT_PORT = 8990
     class << self
       def suitable?(file)
         file =~ /\.feature\Z/
       end
     end
     self.default_options = ['--color']
+
+    def execute!
+      @env.spork_running?(SPORK_DEFAULT_PORT) ? execute_direct!(SPORK_DEFAULT_PORT) : super
+    end
 
     private
     def raw_commands
