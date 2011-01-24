@@ -3,7 +3,10 @@ require 'pathname'
 require 'yaml'
 require 'drb'
 require 'timeout'
-require 'bundler'
+begin
+  require 'bundler'
+rescue LoadError => bundler_not_installed_ignore
+end
 
 module SpeCuke
   class Environment
@@ -17,7 +20,7 @@ module SpeCuke
     end
 
     def bundlized?
-      (@root + 'Gemfile').exist?
+      defined?(Bundler) && (@root + 'Gemfile').exist?
     end
 
     def gem_format_executable?
