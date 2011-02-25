@@ -24,6 +24,10 @@ module SpeCuke::Target
       cmds << fn_and_line
     end
 
+    def drb_commands
+      raw_commands[(1..-1)].flatten
+    end
+
     def rake_commands
       cmds = [@env.command('rake'), 'cucumber', "FEATURE=#{fn_and_line}"]
       if @line

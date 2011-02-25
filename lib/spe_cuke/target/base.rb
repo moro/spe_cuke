@@ -33,8 +33,12 @@ module SpeCuke
         rescue SocketError, Errno::EADDRNOTAVAIL
           DRb.start_service("druby://:0")
         end
-        puts "direct executing `spork_server.run(#{Array(fn_and_line).join(" ")})'"
-        @env.spork_server(port).run(Array(fn_and_line), STDERR, STDOUT)
+        puts "direct executing `spork_server.run(#{Array(drb_commands).inspect})'"
+        @env.spork_server(port).run(drb_commands, STDERR, STDOUT)
+      end
+
+      def drb_commands
+        Array(fn_and_line)
       end
     end
   end
