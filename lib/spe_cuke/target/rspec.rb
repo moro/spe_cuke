@@ -30,7 +30,7 @@ module SpeCuke::Target
     def spec_command_base
       v = @env.bundled_version('rspec')
 
-      (v.nil? || v < Gem::Version.new("2.0.0.beta.0")) ? 'spec' : 'rspec'
+      (v.nil? || v > Gem::Version.new("2.0.0.beta.0")) ? 'rspec' : 'spec'
     end
 
     def rake_commands
