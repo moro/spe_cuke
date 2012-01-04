@@ -22,10 +22,10 @@ describe Target::Rspec do
     before do
       @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb')
-      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color spec/foo/bar_spec.rb])
+      SpeCuke.should_receive(:wrap_execute!).with(%w[rspec --color spec/foo/bar_spec.rb])
     end
 
-    it(%q[spec --color spec/foo/bar_spec.rb]){ @target.execute! }
+    it(%q[rspec --color spec/foo/bar_spec.rb]){ @target.execute! }
   end
 
 
@@ -33,10 +33,10 @@ describe Target::Rspec do
     before do
       @env.stub!(:prefer_rake?).and_return false
       @target = Target::Rspec.new(@env, 'spec/foo/bar_spec.rb', 40)
-      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color -fn spec/foo/bar_spec.rb:40])
+      SpeCuke.should_receive(:wrap_execute!).with(%w[rspec --color -fn spec/foo/bar_spec.rb:40])
     end
 
-    it(%q[spec --color -l 40 spec/foo/bar_spec.rb]){ @target.execute! }
+    it(%q[rspec --color -l 40 spec/foo/bar_spec.rb]){ @target.execute! }
   end
 
   context 'spec/foo/bar_spec.rb on line:40/spork:true' do

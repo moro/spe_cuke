@@ -16,7 +16,7 @@ describe ProductCode do
 
       spec = 'spec/spe_cuke/target/product_code_spec.rb'
       File.should_receive(:exist?).with(spec).and_return true
-      SpeCuke.should_receive(:wrap_execute!).with(%w[spec --color] << spec)
+      SpeCuke.should_receive(:wrap_execute!).with(%w[rspec --color] << spec)
     end
     it("should call wrap_execute with valid args"){ @target.execute! }
   end
